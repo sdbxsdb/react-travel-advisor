@@ -1,11 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { CssBaseline, Grid } from "@material-ui/core";
 
 import Header from "./components/Header/Header.jsx";
 import List from "./components/List/List.jsx";
 import Map from "./components/Map/Map.jsx";
+import { getPlacesData } from "./api/index.js";
 
 const App = () => {
+  const [places, setPlaces] = useState([]);
+
+  const [coordinates, setCoordinates] = useState({});
+  const [bounds, setBounds] = useState(null);
+
+  useEffect(() => {
+    getPlacesData().then((data) => {
+      console.log({ data });
+      setPlaces(data);
+    });
+  }, []);
+
   return (
     <>
       <CssBaseline />
@@ -15,7 +28,11 @@ const App = () => {
           <List />
         </Grid>
         <Grid item xs={12} md={8}>
-          <Map />
+          <Map
+            setCoordinates={setCoordinates}
+            setBounds={setBounds}
+            coordinates={coordinates}
+          />
         </Grid>
       </Grid>
     </>
